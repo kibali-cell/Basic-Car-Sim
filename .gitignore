@@ -1,0 +1,9 @@
+# Unity
+Temp/
+Obj/
+Library/
+Build/
+*.csproj
+*.unityproj
+*.sln
+*.user
