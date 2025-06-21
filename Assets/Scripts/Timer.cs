@@ -1,6 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-// using UnityEngine.UI;
-using TMPro;
+using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
@@ -8,29 +9,43 @@ public class Timer : MonoBehaviour
     private float elapsedTime;
     private bool hasStartedLap = false;
 
-    // public GameObject lapText;
-    public TMP_Text lapText;
+    public GameObject lapText;
+    public GameObject prevLapText;
+    public GameObject bestLap;
+
+    List<float> bestTimes = new List<float>();
 
     void Update()
     {
-        // if (hasStartedLap)
-        // {
-        //     elapsedTime = Time.time - startTime;
-        //     // Debug.Log(elapsedTime);
+        if (hasStartedLap)
+        {
+            elapsedTime = Time.time - startTime;
+            // Debug.Log(elapsedTime);
 
-        //     lapText.GetComponent<Text>().text = "Lap Time:" + elapsedTime.ToString();
-        // }
+            lapText.GetComponent<Text>().text = "Lap Time:" + elapsedTime.ToString();
+        }
 
-        if (!hasStartedLap || lapText == null)
-            return;
-        
-        elapsedTime = Time.time - startTime;
-        lapText.text = "Lap Time: " + elapsedTime.ToString("F2");
-    }
+      }
 
     private void OnTriggerEnter(Collider other)
-    {
-        hasStartedLap = true;
-        startTime = Time.time;
+    { 
+        if(other.CompareTag("Player"))
+        {
+
+            hasStartedLap = true;
+            startTime = Time.time;
+
+            prevLapText.GetComponent<Text>().text = "Last Lap: " + elapsedTime.ToString();
+        
+            if (elapsedTime != 0){
+                bestTimes.Add(elapsedTime);
+            }
+
+            if (bestTimes.Count > 0){
+                bestTimes.Sort();
+                bestLap.GetComponent<Text>().text = "Best Lap: " + bestTimes[0].ToString();
+            }  
+
+        }
     }
 }
